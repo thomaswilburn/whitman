@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%= json.project.title %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+  
+    <h1>Whitman</h1>
+    
+    <main class="sampler" ng-controller="sampler">
+      <nav class="controls">
+        <a ng-click="playPause()">Play/Pause</a>
+      </nav>
+      <track ng-repeat="track in tracks" data="track" clock="clock"></track>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
