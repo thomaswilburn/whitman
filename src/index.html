@@ -7,12 +7,10 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-  
-    <h1>Whitman</h1>
-    
     <main class="sampler" ng-controller="sampler">
       <nav class="controls">
-        <a ng-click="playPause()">Play/Pause</a>
+        <a ng-click="playPause()">{{clock.playing ? "&#9646;&#9646;" : "&#9654;"}}</a>
+        <a ng-click="reset()">&#9724;</a>
       </nav>
       <track ng-repeat="track in tracks" data="track" clock="clock"></track>
     </main>

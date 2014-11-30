@@ -14,7 +14,7 @@ define([
     };
     
     for (var i = 0; i < 4; i++) {
-      $scope.tracks.push(audio.makeTrack());
+      $scope.tracks.push(audio.makeTrack(4 * 8));
     }
     
     var cycle = function() {
@@ -27,19 +27,38 @@ define([
         }
       }
       if (clock.playing) clock.timeout = $timeout(cycle, 60 * 1000 / clock.tempo)
-    }
+    };
     //clock.timeout = $timeout(cycle, 60 * 1000 / clock.tempo);
     
     $scope.playPause = function() {
       if (clock.playing) {
         clock.playing = false;
-        if (clock.timeout) $timeout.cancel(clock.timeout);
+        if (clock.timeout) {
+          $timeout.cancel(clock.timeout);
+          clock.timeout = null;
+        }
       } else {
         clock.playing = true;
         if (clock.index >= 0) clock.index--;
         cycle();
       }
-    }
+    };
+    
+    $scope.reset = function() {
+      clock.index = -1;
+      clock.playing = false;
+      if (clock.timeout) {
+        $timeout.cancel(clock.timeout);
+        clock.timeout = null;
+      }
+    };
+    
+    window.addEventListener("keypress", function(e) {
+      if (e.keyCode == 32) {
+        $scope.playPause();
+        $scope.$apply();
+      }
+    });
     
   }]);
 })

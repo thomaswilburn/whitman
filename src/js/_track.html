@@ -1,14 +1,18 @@
 <div class="controls">
-  <h1>{{track.filename}}</h1>
-  <h2>{{track.status}}</h2>
-  <input type="file">
-  <a ng-click="pickFile()">Choose file</a>
-  <input type="range" ng-model="lowpass" value="22000" min="200" max="22000">
-  <input type="range" ng-model="volume" value="100" min="0" max="100">
+  <div class="sample-choice">
+    <img ng-src="">
+  </div>
+  <div class="sample-choice">
+    <img ng-src="">
+  </div>
 </div>
-<span 
+<span
   class="cell"
   ng-repeat="cell in track.sequence"
-  ng-class="{ active: cell.active, current: clock.index == $index }"
+  ng-class="{
+    active: cell.active,
+    current: clock.index == $index,
+    quarter: !($index % 2)
+  }"
   ng-click="cell.active = !cell.active"
 ></span>
