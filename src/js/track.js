@@ -2,6 +2,7 @@ define([
   "application",
   "text!_track.html"
 ], function(app, template) {
+
   app.directive("track", function() {
     return {
       restrict: "E",
@@ -20,20 +21,16 @@ define([
           scope.status = "Loading";
           var file = this.files[0];
           if (!file) return;
-          window.file = file;
           var reader = new FileReader();
           reader.onload = function() {
             scope.track.load(reader.result, function() {
               scope.status = "Ready";
               scope.track.filename = file.name;
+              scope.$apply();
             });
           }
           reader.readAsArrayBuffer(file);
         });
-        
-        scope.pickFile = function() {
-          fileInput[0].click();
-        }
         
         scope.$watch("lowpass", function() {
           scope.track.filter.frequency.value = scope.lowpass * 1;

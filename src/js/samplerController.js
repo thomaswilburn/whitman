@@ -4,6 +4,9 @@ define([
   "track"
 ], function(app, audio) {
   app.controller("sampler", ["$scope", "$timeout", function($scope, $timeout) {
+
+    var autosave = 5 * 1000;
+    var songLength = 4 * 8;
     
     var tracks = $scope.tracks = [];
     var clock = $scope.clock = {
@@ -14,8 +17,24 @@ define([
     };
     
     for (var i = 0; i < 4; i++) {
-      $scope.tracks.push(audio.makeTrack(4 * 8));
+      $scope.tracks.push(audio.makeTrack(songLength));
     }
+
+    if (localStorage.song) {
+      var song = JSON.parse(localStorage.song);
+      song.forEach(function(track, i) {
+        tracks[i].sequence = track;
+      });
+    }
+
+    var persist = function() {
+      var song = tracks.map(function(t) {
+        return t.sequence;
+      });
+      localStorage.song = JSON.stringify(song);
+      setTimeout(persist, autosave);
+    };
+    persist();
     
     var cycle = function() {
       clock.index++;
@@ -26,7 +45,7 @@ define([
           track.trigger();
         }
       }
-      if (clock.playing) clock.timeout = $timeout(cycle, 60 * 1000 / clock.tempo)
+      if (clock.playing) clock.timeout = $timeout(cycle, 60 * 1000 / clock.tempo);
     };
     //clock.timeout = $timeout(cycle, 60 * 1000 / clock.tempo);
     
@@ -44,13 +63,19 @@ define([
       }
     };
     
-    $scope.reset = function() {
+    $scope.seekZero = function() {
       clock.index = -1;
       clock.playing = false;
       if (clock.timeout) {
         $timeout.cancel(clock.timeout);
         clock.timeout = null;
       }
+    };
+
+    $scope.reset = function() {
+      tracks.forEach(function(t) {
+        t.reset();
+      });
     };
     
     window.addEventListener("keypress", function(e) {

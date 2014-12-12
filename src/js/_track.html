@@ -1,13 +1,12 @@
-<div class="controls">
-  <div class="sample-choice">
-    <img ng-src="">
-  </div>
-  <div class="sample-choice">
-    <img ng-src="">
-  </div>
+<div class="track-ui flex column">
+  <input type="file" id="file-{{track.id}}">
+  <label for="file-{{track.id}}" class="fa fa-file-audio-o"></label>
+  <ul class="file-info">
+    <li> {{track.filename}}
+  </ul>
 </div>
 <span
-  class="cell"
+  class="cell flex"
   ng-repeat="cell in track.sequence"
   ng-class="{
     active: cell.active,

@@ -1,17 +1,8 @@
 define(function() {
   
   var context = new AudioContext();
-  
-  var wilhelm;
-  var request = new XMLHttpRequest();
-  request.open("GET", "WilhelmScream.wav");
-  request.responseType = "arraybuffer";
-  request.onload = function() {
-    context.decodeAudioData(request.response, function(buffer) {
-      wilhelm = buffer;
-    });
-  };
-  request.send();
+
+  var trackCounter = 0;
   
   var Track = function(length) {
     this.filename = null;
@@ -20,6 +11,7 @@ define(function() {
     this.amp.connect(context.destination);
     this.filter = context.createBiquadFilter();
     this.filter.connect(this.amp);
+    this.id = trackCounter++;
     this.sequence = [];
     for (var i = 0; i < length; i++) {
       this.sequence.push({
@@ -46,8 +38,16 @@ define(function() {
     load: function(buffer, c) {
       var self = this;
       context.decodeAudioData(buffer, function(audio) {
-        self.buffer= audio;
+        self.buffer = audio;
         if (c) c();
+      });
+    },
+    restore: function(id) {
+
+    },
+    reset: function() {
+      this.sequence = this.sequence.map(function() {
+        return { active: false };
       });
     }
   }
@@ -55,13 +55,6 @@ define(function() {
   return {
     makeTrack: function(length) {
       return new Track(length || 8);
-    },
-    playScream: function() {
-      if (!wilhelm) return;
-      var source = context.createBufferSource();
-      source.buffer = wilhelm;
-      source.connect(context.destination);
-      source.start(0);
     }
   }
   
