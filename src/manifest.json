@@ -1,0 +1,39 @@
+{
+  "name": "Whitman",
+  "description": "A simple sampler for Chrome and Chrome OS",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "default_locale": "en",
+  "icons": {
+    "128": "icon-128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": [
+        "background.js",
+      ]
+    }
+  },
+  "permissions": [
+    "clipboardRead",
+    "clipboardWrite",
+    "storage",
+    "syncFileSystem",
+    {
+      "fileSystem": [
+        "write",
+        "retainEntries",
+        "directory"
+      ]
+    }
+  ],
+  "kiosk_enabled": false,
+  "offline_enabled": true,
+  "file_handlers": {
+    "text": {
+      "extensions": [
+        "jsong"
+      ],
+    }
+  }
+}
