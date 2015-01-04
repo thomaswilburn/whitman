@@ -1,8 +1,9 @@
 define([
   "application",
   "audio",
+  "io",
   "track"
-], function(app, audio) {
+], function(app, audio, io) {
   app.controller("sampler", ["$scope", "$timeout", function($scope, $timeout) {
 
     var autosave = 5 * 1000;
@@ -75,6 +76,18 @@ define([
     $scope.reset = function() {
       tracks.forEach(function(t) {
         t.reset();
+      });
+    };
+    
+    $scope.saveSong = function() {
+      io.save({a: 123}, function() {
+        console.log("ok");
+      });
+    };
+    
+    $scope.loadSong = function() {
+      io.load(function(data) {
+        console.log(data);
       });
     };
     
