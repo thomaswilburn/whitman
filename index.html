@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body ng-csp>
+    <h1><i class="fa fa-music"></i> Whitman <i class="fa fa-music"></i></h1>
+    <p class="instructions">
+      Click on a box to set that note on or off. Click the file icon on the left to load a sound for that track. The bomb icon will reset the song completely. Your song will be saved to local storage automatically. Save/restore to the file system is coming soon.
+    <main class="sampler flex column" ng-controller="sampler">
+      <section class="ui">
+      <nav class="playback controls">
+        <a 
+          class="fa"
+          ng-class="{ 'fa-play': !clock.playing, 'fa-pause': clock.playing }"
+          ng-click="playPause()"
+          title="Play/pause"
+        ></a>
+        <a class="fa fa-step-backward" ng-click="seekZero()" title="Return to start"></a>
+      </nav>
+      <nav class="file controls">
+        <a class="fa fa-bomb" title="Reset" ng-click="reset()"></a>
+        <a class="fa fa-save" title="Save song" ng-click="saveSong()">Save</a>
+        <a class="fa fa-file-text" title="Load song" ng-click="loadSong()">Load</a>
+      </nav>
+      </section>
+      <section class="sequencer flex column">
+        <track class="flex" ng-repeat="track in tracks" data="track" clock="clock"></track>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+  width: 100%;
+}
+body {
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+h1 {
+  margin: 0;
+}
+.flex {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-content: stretch;
+}
+.flex.column {
+  flex-direction: column;
+}
+main .ui {
+  margin-bottom: 8px;
+}
+main nav.controls {
+  font-size: 16px;
+}
+main nav.controls a {
+  cursor: pointer;
+  display: inline-block;
+  background: #CCC;
+  padding: 8px;
+  border-radius: 4px;
+  width: 50px;
+  text-align: center;
+}
+main nav.controls.playback {
+  float: left;
+}
+main nav.controls.file {
+  float: right;
+}
+main track.flex {
+  flex-basis: 50px;
+}
+main track.flex .track-ui {
+  flex-basis: 200px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  background: gray;
+  margin: 2px 0;
+  text-align: center;
+  padding: 0 16px;
+}
+main track.flex .track-ui input[type=file] {
+  display: none;
+}
+main track.flex .track-ui label {
+  font-size: 32px;
+  cursor: pointer;
+}
+main track.flex .track-ui label:hover {
+  color: #555;
+}
+main track.flex .track-ui .file-info {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+main track.flex .track-ui .file-info li {
+  display: block;
+}
+main track.flex .cell {
+  margin: 2px;
+  background: black;
+  background-image: linear-gradient(to top, rgba(128, 128, 128, 0.4), transparent);
+  transition: background .1s linear;
+}
+main track.flex .cell.active {
+  background: orange;
+}
+main track.flex .cell.quarter {
+  background-image: linear-gradient(to bottom, rgba(128, 128, 128, 0.4), transparent);
+}
+main track.flex .cell.current {
+  background: #333;
+}
+main track.flex .cell.current.active {
+  background: red;
+}
