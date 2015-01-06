@@ -37,7 +37,7 @@ define(function() {
       callback();
     },
     localLoad: function(callback) {
-      callback(null, JSON.parse(localStorage.song));
+      callback(null, JSON.parse(localStorage.song || "false"));
     }
   };
   
