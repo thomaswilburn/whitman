@@ -21,7 +21,17 @@ define([
       $scope.tracks.push(audio.makeTrack(songLength));
     }
 
-    io.localLoad(function(song) {
+    var serialize = function() {
+      return tracks.map(function(t) {
+        return t.sequence.map(function(s) {
+          return {
+            active: s.active
+          };
+        });
+      });
+    };
+
+    io.localLoad(function(err, song) {
       if (!song) return;
       song.forEach(function(track, i) {
         tracks[i].sequence = track;
@@ -29,9 +39,7 @@ define([
     });
 
     var persist = function() {
-      var song = tracks.map(function(t) {
-        return t.sequence;
-      });
+      var song = serialize();
       io.localSave(song, function() {
         setTimeout(persist, autosave);
       });
@@ -81,7 +89,7 @@ define([
     };
     
     $scope.saveSong = function() {
-      io.save(tracks.map(function(t) { return t.sequence }), function() {
+      io.save(serialize(), function() {
         console.log("save complete");
       });
     };

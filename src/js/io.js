@@ -1,6 +1,6 @@
 define(function() {
   
-  var useChrome = chrome && chrome.fileSystem;
+  var useChrome = window.chrome && chrome.fileSystem;
   
   var fileInput = document.createElement("input");
   fileInput.type = "file";
@@ -11,7 +11,9 @@ define(function() {
   var browser = {
     save: function(data, callback) {
       link.href = "data:application/javascript;base64," + btoa(JSON.stringify(data));
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       callback();
     },
     load: function(callback) {
@@ -31,10 +33,11 @@ define(function() {
       fileInput.click();
     },
     localSave: function(data, callback) {
-      localStorage.setItem("song", JSON.stringify(data));
+      localStorage.song = JSON.stringify(data);
+      callback();
     },
     localLoad: function(callback) {
-      callback(null, localStorage.song);
+      callback(null, JSON.parse(localStorage.song));
     }
   };
   
@@ -85,6 +88,5 @@ define(function() {
   if (useChrome) {
     return cros;
   }
-  console.log("browser worked");
   return browser;
 });
