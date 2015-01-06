@@ -32,13 +32,13 @@ define([
           reader.readAsArrayBuffer(file);
         });
         
-        scope.$watch("lowpass", function() {
-          scope.track.filter.frequency.value = scope.lowpass * 1;
-        });
+        // scope.$watch("lowpass", function() {
+        //   scope.track.filter.frequency.value = scope.lowpass * 1;
+        // });
         
-        scope.$watch("volume", function() {
-          scope.track.amp.gain.value = scope.volume / 100;
-        })
+        // scope.$watch("volume", function() {
+        //   scope.track.amp.gain.value = scope.volume / 100;
+        // })
       }
     }
   });

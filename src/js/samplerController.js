@@ -21,19 +21,20 @@ define([
       $scope.tracks.push(audio.makeTrack(songLength));
     }
 
-    if (localStorage.song) {
-      var song = JSON.parse(localStorage.song);
+    io.localLoad(function(song) {
+      if (!song) return;
       song.forEach(function(track, i) {
         tracks[i].sequence = track;
       });
-    }
+    });
 
     var persist = function() {
       var song = tracks.map(function(t) {
         return t.sequence;
       });
-      localStorage.song = JSON.stringify(song);
-      setTimeout(persist, autosave);
+      io.localSave(song, function() {
+        setTimeout(persist, autosave);
+      });
     };
     persist();
     
@@ -80,14 +81,17 @@ define([
     };
     
     $scope.saveSong = function() {
-      io.save({a: 123}, function() {
-        console.log("ok");
+      io.save(tracks.map(function(t) { return t.sequence }), function() {
+        console.log("save complete");
       });
     };
     
     $scope.loadSong = function() {
-      io.load(function(data) {
-        console.log(data);
+      io.load(function(err, data) {
+        data.forEach(function(track, i) {
+          tracks[i].sequence = track;
+        });
+        $scope.$apply();
       });
     };
     

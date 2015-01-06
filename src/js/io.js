@@ -1,6 +1,6 @@
 define(function() {
   
-  var useChrome = chrome && chrome.filesystem;
+  var useChrome = chrome && chrome.fileSystem;
   
   var fileInput = document.createElement("input");
   fileInput.type = "file";
@@ -21,26 +21,70 @@ define(function() {
         reader.onload = function() {
           try {
             var data = JSON.parse(reader.result);
-            callback(data);
+            callback(null, data);
           } catch (err) {
             callback("Unable to read the file.");
           }
-        }
+        };
         reader.readAsText(file);
-      }
+      };
       fileInput.click();
+    },
+    localSave: function(data, callback) {
+      localStorage.setItem("song", JSON.stringify(data));
+    },
+    localLoad: function(callback) {
+      callback(null, localStorage.song);
     }
   };
   
   var cros = {
     save: function(data, callback) {
-      
+      chrome.fileSystem.chooseEntry({
+        type: "saveFile",
+        suggestedName: "masterpiece.jsong",
+      }, function(entry) {
+        entry.createWriter(function(writer) {
+          writer.onwriteend = function() {
+            writer.onwriteend = callback;
+            var blob = new Blob([data]);
+            writer.write(blob);
+          };
+          writer.truncate(0);
+        });
+      });
     },
     load: function(callback) {
-      
+      chrome.fileSystem.chooseEntry({
+        type: "openFile"
+      }, function(entry) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          try {
+            var data = JSON.parse(reader.result);
+            callback(null, data);
+          } catch(err) {
+            callback("Unable to read the file.");
+          }
+        };
+        entry.file(function(f) {
+          reader.readAsText(f);
+        });
+      });
+    },
+    localSave: function(data, callback) {
+      chrome.storage.local.set({ song: JSON.stringify(data) }, callback);
+    },
+    localLoad: function(callback) {
+      chrome.storage.local.get("song", function(data) {
+        callback(null, data.song);
+      });
     }
   };
   
-  return useChrome ? cros : browser;
-  
+  if (useChrome) {
+    return cros;
+  }
+  console.log("browser worked");
+  return browser;
 });

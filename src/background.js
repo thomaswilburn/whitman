@@ -30,10 +30,9 @@ var openWindow = function() {
     left: 50,
     top: 50
   };
-  chrome.app.window.create("main.html", {
+  chrome.app.window.create("index.html", {
       bounds: defaults,
       id: "whitman:main",
-      frame: "none",
       minWidth: 640,
       minHeight: 480
   }, function(win) {

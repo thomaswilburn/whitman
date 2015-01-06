@@ -42,9 +42,6 @@ define(function() {
         if (c) c();
       });
     },
-    restore: function(id) {
-
-    },
     reset: function() {
       this.sequence = this.sequence.map(function() {
         return { active: false };
