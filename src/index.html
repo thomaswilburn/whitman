@@ -25,12 +25,12 @@
       </nav>
       <nav class="file controls">
         <a class="fa fa-bomb" title="Reset" ng-click="reset()"></a>
-        <a class="fa fa-save" title="Save song" ng-click="saveSong()">Save</a>
-        <a class="fa fa-file-text" title="Load song" ng-click="loadSong()">Load</a>
+        <a class="fa fa-save" title="Save song" ng-click="saveSong()"></a>
+        <a class="fa fa-file-text" title="Load song" ng-click="loadSong()"></a>
       </nav>
       </section>
       <section class="sequencer flex column">
-        <track class="flex" ng-repeat="track in tracks" data="track" clock="clock"></track>
+        <track class="flex" ng-repeat="track in tracks" data="track" clock="clock" onload="loadedFile"></track>
       </section>
     </main>
 

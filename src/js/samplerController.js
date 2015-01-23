@@ -2,8 +2,9 @@ define([
   "application",
   "audio",
   "io",
+  "idb",
   "track"
-], function(app, audio, io) {
+], function(app, audio, io, Database) {
   app.controller("sampler", ["$scope", "$timeout", function($scope, $timeout) {
 
     var autosave = 5 * 1000;
@@ -31,10 +32,34 @@ define([
       });
     };
 
+    var db = new Database("whitman", 1, function() {
+      db.createStore("tracks", {
+        key: "id",
+        autoIncrement: false,
+        index: {
+          "filename": null
+        }
+      });
+    });
+
     io.localLoad(function(err, song) {
       if (!song) return;
       song.forEach(function(track, i) {
         tracks[i].sequence = track;
+      });
+      db.ready.then(function() {
+        db.getAll("tracks").then(function(all) {
+          Object.keys(all).forEach(function(i) {
+            var reader = new FileReader();
+            reader.onload = function() {
+              tracks[i].load(reader.result, function() {
+                tracks[i].filename = all[i].filename;
+                $scope.$apply();
+              });
+            };
+            reader.readAsArrayBuffer(all[i].blob);
+          });
+        });
       });
     });
 
@@ -102,6 +127,16 @@ define([
         $scope.$apply();
       });
     };
+
+    $scope.loadedFile = function(track, buffer) {
+      db.ready.then(function() {
+        db.put("tracks", {
+          id: track.id,
+          filename: track.filename,
+          blob: new Blob([buffer])
+        });
+      });
+    };
     
     window.addEventListener("keypress", function(e) {
       if (e.keyCode == 32) {
@@ -111,4 +146,4 @@ define([
     });
     
   }]);
-})
+});

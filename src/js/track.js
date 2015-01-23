@@ -1,6 +1,7 @@
 define([
   "application",
-  "text!_track.html"
+  "text!_track.html",
+  "idb"
 ], function(app, template) {
 
   app.directive("track", function() {
@@ -9,7 +10,8 @@ define([
       template: template,
       scope: {
         track: "=data",
-        clock: "="
+        clock: "=",
+        onload: "="
       },
       link: function(scope, element, attr) {
         scope.status = "Empty";
@@ -27,8 +29,9 @@ define([
               scope.status = "Ready";
               scope.track.filename = file.name;
               scope.$apply();
+              if (scope.onload) scope.onload(scope.track, reader.result);
             });
-          }
+          };
           reader.readAsArrayBuffer(file);
         });
         
