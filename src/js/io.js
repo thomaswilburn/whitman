@@ -23,7 +23,8 @@ define(function() {
         reader.onload = function() {
           try {
             var data = JSON.parse(reader.result);
-            callback(null, data);
+            var filename = file.name;
+            callback(null, data, filename);
           } catch (err) {
             callback("Unable to read the file.");
           }

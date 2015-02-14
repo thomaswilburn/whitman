@@ -120,7 +120,8 @@ define([
     };
     
     $scope.loadSong = function() {
-      io.load(function(err, data) {
+      io.load(function(err, data, filename) {
+        $scope.filename = filename;
         data.forEach(function(track, i) {
           tracks[i].sequence = track;
         });
